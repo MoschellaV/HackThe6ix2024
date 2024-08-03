@@ -25,7 +25,7 @@ bucket = storage.bucket("hackthe6ix-83702.appspot.com")
 from generate_text import generate_text
 from generate_speech import text_to_speech
 from utils import check_string_length
-from db.operations import upload_audio
+from db.operations import upload_audio, update_completion_status
 
 load_dotenv()
 
@@ -40,13 +40,13 @@ eleven_labs_api_key = os.getenv('ELEVEN_LABS_API_KEY')
 client = Client(account_sid, auth_token)
 
 class RequestModel(BaseModel):
+    id: str
     prompt: str
     tone: str
     phoneNumber: str
     purpose: str
     voice: str
     lengthOfCall: str
-
 
 app = FastAPI()
 
@@ -66,10 +66,12 @@ app.add_middleware(
 @app.post("/start-call")
 async def start_call(req: RequestModel, background_tasks: BackgroundTasks):
     data = req.dict()
+    update_completion_status(data["id"], "Generating custom message")
     initial_response = generate_text(data["prompt"], data["tone"], data["purpose"], data["lengthOfCall"])
-
     check_string_length(initial_response.content, 10000)
+
     print(initial_response.content)
+    update_completion_status(data["id"], "Creating speech")
     audio_file = text_to_speech(initial_response.content, data["voice"], eleven_labs_api_key)
 
     file_path = upload_audio(audio_file, bucket)
@@ -77,6 +79,7 @@ async def start_call(req: RequestModel, background_tasks: BackgroundTasks):
     twiml = VoiceResponse()
     twiml.play(file_path)
 
+    update_completion_status(data["id"], "Making call")
     call = client.calls.create(
             to=req.phoneNumber,
             from_=twilio_number,
