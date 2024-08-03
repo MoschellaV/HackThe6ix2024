@@ -16,7 +16,8 @@ export async function POST(request) {
       voice: voice,
       lengthOfCall: lengthOfCall,
       createdAt: new Date().toISOString(),
-      completionStatus: "pending"
+      completionStatus: "pending",
+      recordingURL: null
     };
 
     await docRef.set(newDoc);

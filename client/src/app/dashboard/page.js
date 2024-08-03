@@ -15,7 +15,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { postData } from "@/services/api";
+import { postData, saveCallData } from "@/services/api";
 
 export default function Dashboard() {
   const schema = z.object({
@@ -25,17 +25,33 @@ export default function Dashboard() {
     lengthOfCall: z.string().min(1, { message: "Required" }),
 
     tone: z.enum(["Flirty", "Funny", "Mean", "Normal"], { errorMap: () => ({ message: "Required" }) }),
-    voice: z.enum(['pqHfZKP75CvOlQylNhV4', "jsCqWAovK2LkecY7zXl4", "bIHbv24MWmeRgasZH58o", "ThT5KcBeYPX3keUQqHPh"], { errorMap: () => ({ message: "Required" }) })
-
+    voice: z.enum(["pqHfZKP75CvOlQylNhV4", "jsCqWAovK2LkecY7zXl4", "bIHbv24MWmeRgasZH58o", "ThT5KcBeYPX3keUQqHPh"], {
+      errorMap: () => ({ message: "Required" })
+    })
   });
 
   const { handleSubmit, control } = useForm({
     resolver: zodResolver(schema)
   });
 
-  const onSubmit = data => {
-    console.log(data);
-    postData(data.prompt, data.tone, data.phoneNumber, data.purpose, data.voice, data.lengthOfCall);
+  const onSubmit = async data => {
+    const savedData = await saveCallData(
+      data.prompt,
+      data.tone,
+      data.phoneNumber,
+      data.purpose,
+      data.voice,
+      data.lengthOfCall
+    );
+
+    if (savedData.status === 201) {
+      const { id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall, createdAt, completionStatus, recordingURL } =
+        savedData.data.document;
+
+      postData(id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall);
+    } else {
+      console.log("Error saving data");
+    }
   };
 
   return (
@@ -89,7 +105,7 @@ export default function Dashboard() {
                 )}
               />
 
-            <Controller
+              <Controller
                 control={control}
                 name="lengthOfCall"
                 render={({ field, fieldState }) => (
@@ -153,7 +169,7 @@ export default function Dashboard() {
                     <FormControl variant="outlined" size="small" fullWidth>
                       <InputLabel>AI Tone</InputLabel>
                       <Select {...field} label="AI Tone" error={!!fieldState.error}>
-                        <MenuItem value='pqHfZKP75CvOlQylNhV4'>Bill</MenuItem>
+                        <MenuItem value="pqHfZKP75CvOlQylNhV4">Bill</MenuItem>
                         <MenuItem value="jsCqWAovK2LkecY7zXl4">Freya</MenuItem>
                         <MenuItem value="bIHbv24MWmeRgasZH58o">Will</MenuItem>
                         <MenuItem value="ThT5KcBeYPX3keUQqHPh">Dorothy</MenuItem>
