@@ -1,0 +1,6 @@
+fastapi~=0.112.0
+requests
+openai~=1.36.1
+python-dotenv
+uvicorn
+twilio
