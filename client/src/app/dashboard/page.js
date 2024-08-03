@@ -12,12 +12,11 @@ import Select from '@mui/material/Select';
 export default function Dashboard() {
   const { user } = useUserContext();
   const [value, setValue] = useState("");
-  const [tone, setTone] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [purpose, setPurpose] = useState("");
 
   const handleClick = () => {
-    postData({ value, tone, phoneNumber, purpose });
+    postData({ value, phoneNumber, purpose });
   };
 
   return (
@@ -46,18 +45,18 @@ export default function Dashboard() {
         onChange={e => setPurpose(e.target.value)}
       />
       <FormControl>
-        <InputLabel id="demo-simple-select-label">Tone</InputLabel>
+        <InputLabel id="demo-simple-select-label">Value</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={tone}
-          label="Tone"
-          onChange={(event) => setTone(event.target.value)}
+          value={value}
+          label="Value"
+          onChange={(event) => setValue(event.target.value)}
         >
-          <MenuItem value={10}>Flirty</MenuItem>
-          <MenuItem value={20}>Funny</MenuItem>
-          <MenuItem value={30}>Normal</MenuItem>
-          <MenuItem value={40}>Mean</MenuItem>
+          <MenuItem value="Flirty">Flirty</MenuItem>
+          <MenuItem value="Funny">Funny</MenuItem>
+          <MenuItem value="Normal">Normal</MenuItem>
+          <MenuItem value="Mean">Mean</MenuItem>
         </Select>
       </FormControl>
       <Button onClick={handleClick} variant="contained" color="primary">
