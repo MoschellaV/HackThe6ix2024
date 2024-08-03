@@ -22,7 +22,11 @@ export default function Dashboard() {
     prompt: z.string().min(1, { message: "Required" }),
     purpose: z.string().min(1, { message: "Required" }),
     phoneNumber: z.string().min(10, { message: "Phone number must be at least 10 digits" }),
-    tone: z.enum(["Flirty", "Funny", "Mean", "Normal"], { errorMap: () => ({ message: "Required" }) })
+    lengthOfCall: z.string().min(1, { message: "Required" }),
+
+    tone: z.enum(["Flirty", "Funny", "Mean", "Normal"], { errorMap: () => ({ message: "Required" }) }),
+    voice: z.enum(['pqHfZKP75CvOlQylNhV4', "jsCqWAovK2LkecY7zXl4", "bIHbv24MWmeRgasZH58o", "ThT5KcBeYPX3keUQqHPh"], { errorMap: () => ({ message: "Required" }) })
+
   });
 
   const { handleSubmit, control } = useForm({
@@ -31,19 +35,8 @@ export default function Dashboard() {
 
   const onSubmit = data => {
     console.log(data);
-    postData(data.prompt, data.tone, data.phoneNumber, data.purpose);
+    postData(data.prompt, data.tone, data.phoneNumber, data.purpose, data.voice, data.lengthOfCall);
   };
-
-  // const firstContentRef = useRef(null);
-  // const secondContentRef = useRef(null);
-
-  // const scrollToFirstContent = () => {
-  //   firstContentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  // };
-
-  // const scrollToSecondContent = () => {
-  //   secondContentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  // };
 
   return (
     <AuroraBackground className={"h-fit"}>
@@ -96,6 +89,25 @@ export default function Dashboard() {
                 )}
               />
 
+            <Controller
+                control={control}
+                name="lengthOfCall"
+                render={({ field, fieldState }) => (
+                  <TextField
+                    label="lengthOfCall"
+                    variant="outlined"
+                    fullWidth
+                    size="small"
+                    multiline
+                    rows={4}
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                  />
+                )}
+              />
+
               <Controller
                 control={control}
                 name="phoneNumber"
@@ -126,6 +138,25 @@ export default function Dashboard() {
                         <MenuItem value="Funny">Funny 😂</MenuItem>
                         <MenuItem value="Mean">Mean 😡</MenuItem>
                         <MenuItem value="Normal">Normal 😐</MenuItem>
+                      </Select>
+                      {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
+                    </FormControl>
+                  </div>
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="voice"
+                render={({ field, fieldState }) => (
+                  <div className="flex flex-col w-full">
+                    <FormControl variant="outlined" size="small" fullWidth>
+                      <InputLabel>AI Tone</InputLabel>
+                      <Select {...field} label="AI Tone" error={!!fieldState.error}>
+                        <MenuItem value='pqHfZKP75CvOlQylNhV4'>Bill</MenuItem>
+                        <MenuItem value="jsCqWAovK2LkecY7zXl4">Freya</MenuItem>
+                        <MenuItem value="bIHbv24MWmeRgasZH58o">Will</MenuItem>
+                        <MenuItem value="ThT5KcBeYPX3keUQqHPh">Dorothy</MenuItem>
                       </Select>
                       {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
                     </FormControl>
