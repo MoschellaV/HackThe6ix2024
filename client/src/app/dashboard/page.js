@@ -11,14 +11,14 @@ import Select from '@mui/material/Select';
 
 export default function Dashboard() {
   const { user } = useUserContext();
-  const [value, setValue] = useState("");
+  const [prompt, setPrompt] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [tone, setTone] = useState("");
 
   const [purpose, setPurpose] = useState("");
 
   const handleClick = () => {
-    postData({ value, tone, phoneNumber, purpose });
+    postData({ prompt, tone, phoneNumber, purpose });
   };
 
   return (
@@ -29,8 +29,8 @@ export default function Dashboard() {
         variant="filled"
         multiline
         rows={4}
-        value={value}
-        onChange={e => setValue(e.target.value)}
+        value={prompt}
+        onChange={e => setPrompt(e.target.value)}
       />
       <TextField
         id="phone-number"
