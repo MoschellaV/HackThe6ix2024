@@ -13,6 +13,8 @@ export default function Dashboard() {
   const { user } = useUserContext();
   const [value, setValue] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [tone, setTone] = useState("");
+
   const [purpose, setPurpose] = useState("");
 
   const handleClick = () => {
@@ -49,9 +51,9 @@ export default function Dashboard() {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={value}
+          value={tone}
           label="Value"
-          onChange={(event) => setValue(event.target.value)}
+          onChange={(event) => setTone(event.target.value)}
         >
           <MenuItem value="Flirty">Flirty</MenuItem>
           <MenuItem value="Funny">Funny</MenuItem>
