@@ -60,7 +60,7 @@ export default function Dashboard() {
 
   return (
     <AuroraBackground className={"h-fit"}>
-      <div className="flex flex-col w-full items-center justify-center w-full overflow-hidden">
+      <div className="flex flex-col w-full items-center justify-center overflow-hidden">
         <div className="overflow-hidden p-5 rounded-md w-full h-screen flex items-center justify-center flex flex-col gap-4">
           <label className="text-8xl font-sans font-semibold">Call Me Maybe</label>
           <label className="text-2xl font-san font-medium "> Speak Less, Achieve More</label>
@@ -68,8 +68,8 @@ export default function Dashboard() {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="p-5 rounded-md w-full h-screen flex items-center justify-center w-full">
-          <div className="w-1/2 h-screen flex items-center justify-center">
+          className="p-5 rounded-md w-full h-screen flex items-center justify-center">
+          <div className="w-full md:w-1/2 h-screen flex items-center justify-center">
             <div className="bg-transparent p-8 rounded-lg flex flex-col items-center gap-10 shadow-lg w-full ">
               <label className="text-2xl font-semibold">What can we do for you today?</label>
 
