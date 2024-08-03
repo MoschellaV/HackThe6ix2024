@@ -4,10 +4,10 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { postData } from "@/services/api";
 import { useUserContext } from "@/context/UserContext";
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
 
 export default function Dashboard() {
   const { user } = useUserContext();
@@ -18,7 +18,7 @@ export default function Dashboard() {
   const [purpose, setPurpose] = useState("");
 
   const handleClick = () => {
-    postData({ prompt, tone, phoneNumber, purpose });
+    postData(prompt, tone, phoneNumber, purpose);
   };
 
   return (
@@ -53,8 +53,7 @@ export default function Dashboard() {
           id="demo-simple-select"
           value={tone}
           label="Value"
-          onChange={(event) => setTone(event.target.value)}
-        >
+          onChange={event => setTone(event.target.value)}>
           <MenuItem value="Flirty">Flirty</MenuItem>
           <MenuItem value="Funny">Funny</MenuItem>
           <MenuItem value="Normal">Normal</MenuItem>
