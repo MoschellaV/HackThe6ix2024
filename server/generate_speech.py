@@ -25,7 +25,7 @@ def text_to_speech(input_text, voice_id, eleven_labs_api_key):
         response.raise_for_status()
 
     except requests.exceptions.RequestException as err:
-        print(f"Error occurred: {err}")
+        print(f"Error occurred generating speech: {err}")
         return None
 
     audio_file = 'output.mp3'

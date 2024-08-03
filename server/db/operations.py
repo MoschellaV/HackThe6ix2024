@@ -38,3 +38,10 @@ def update_completion_status(doc_id, new_status):
     doc_ref.update({
         'completionStatus': new_status
     })
+
+def update_recording_url(doc_id, url):
+    doc_ref = db.collection('calls').document(doc_id)
+
+    doc_ref.update({
+        'recordingURL': url
+    })

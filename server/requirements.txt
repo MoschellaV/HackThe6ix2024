@@ -6,3 +6,4 @@ uvicorn
 twilio
 google-cloud-speech
 firebase_admin
+python-multipart
