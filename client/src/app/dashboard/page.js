@@ -2,9 +2,6 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,7 +19,8 @@ export default function Dashboard() {
     prompt: z.string().min(1, { message: "Required" }),
     purpose: z.string().min(1, { message: "Required" }),
     phoneNumber: z.string().min(10, { message: "Phone number must be at least 10 digits" }),
-    lengthOfCall: z.string().min(1, { message: "Required" }),
+    lengthOfCall: z.enum(["small", "medium", "large"], { errorMap: () => ({ message: "Required" }) }),
+
 
     tone: z.enum(["Flirty", "Funny", "Mean", "Normal"], { errorMap: () => ({ message: "Required" }) }),
     voice: z.enum(["pqHfZKP75CvOlQylNhV4", "jsCqWAovK2LkecY7zXl4", "bIHbv24MWmeRgasZH58o", "ThT5KcBeYPX3keUQqHPh"], {
@@ -107,25 +105,6 @@ export default function Dashboard() {
 
               <Controller
                 control={control}
-                name="lengthOfCall"
-                render={({ field, fieldState }) => (
-                  <TextField
-                    label="lengthOfCall"
-                    variant="outlined"
-                    fullWidth
-                    size="small"
-                    multiline
-                    rows={4}
-                    value={field.value ?? ""}
-                    onChange={field.onChange}
-                    error={!!fieldState.error}
-                    helperText={fieldState.error?.message}
-                  />
-                )}
-              />
-
-              <Controller
-                control={control}
                 name="phoneNumber"
                 render={({ field, fieldState }) => (
                   <TextField
@@ -141,6 +120,27 @@ export default function Dashboard() {
                   />
                 )}
               />
+
+              <div className="flex flex-row w-full gap-2">
+
+              <Controller
+                control={control}
+                name="lengthOfCall"
+                render={({ field, fieldState }) => (
+                  <div className="flex flex-col w-full">
+                    <FormControl variant="outlined" size="small" fullWidth>
+                      <InputLabel>Length of Call</InputLabel>
+                      <Select {...field} label="AI Tone" error={!!fieldState.error}>
+                        <MenuItem value="small">Small 🥰</MenuItem>
+                        <MenuItem value="medium">Medium 😂</MenuItem>
+                        <MenuItem value="large">Large 😡</MenuItem>
+                      </Select>
+                      {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
+                    </FormControl>
+                  </div>
+                )}
+              />
+
 
               <Controller
                 control={control}
@@ -179,8 +179,13 @@ export default function Dashboard() {
                   </div>
                 )}
               />
+              </div>
 
-              <Button type="submit">Submit</Button>
+              <Button 
+              sx={{borderRadius: '8px'}}
+              fullWidth
+              variant="contained"
+              type="submit">Submit</Button>
             </div>
           </div>
         </form>
