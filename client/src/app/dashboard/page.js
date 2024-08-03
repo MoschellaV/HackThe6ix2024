@@ -12,10 +12,12 @@ import Select from '@mui/material/Select';
 export default function Dashboard() {
   const { user } = useUserContext();
   const [value, setValue] = useState("");
-  const [tone, setTone] = useState('');
-  
+  const [tone, setTone] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [purpose, setPurpose] = useState("");
+
   const handleClick = () => {
-    postData(value, tone);
+    postData({ value, tone, phoneNumber, purpose });
   };
 
   return (
@@ -29,20 +31,33 @@ export default function Dashboard() {
         value={value}
         onChange={e => setValue(e.target.value)}
       />
+      <TextField
+        id="phone-number"
+        label="Phone Number"
+        variant="filled"
+        value={phoneNumber}
+        onChange={e => setPhoneNumber(e.target.value)}
+      />
+      <TextField
+        id="purpose"
+        label="Purpose"
+        variant="filled"
+        value={purpose}
+        onChange={e => setPurpose(e.target.value)}
+      />
       <FormControl>
-        <InputLabel id="demo-simple-select-label">tone</InputLabel>
+        <InputLabel id="demo-simple-select-label">Tone</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={tone}
-          label="tone"
+          label="Tone"
           onChange={(event) => setTone(event.target.value)}
         >
           <MenuItem value={10}>Flirty</MenuItem>
           <MenuItem value={20}>Funny</MenuItem>
           <MenuItem value={30}>Normal</MenuItem>
-          <MenuItem value={30}>Mean</MenuItem>
-
+          <MenuItem value={40}>Mean</MenuItem>
         </Select>
       </FormControl>
       <Button onClick={handleClick} variant="contained" color="primary">
