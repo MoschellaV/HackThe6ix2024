@@ -15,6 +15,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import { postData } from "@/services/api";
 
 export default function Dashboard() {
   const schema = z.object({
@@ -30,6 +31,7 @@ export default function Dashboard() {
 
   const onSubmit = data => {
     console.log(data);
+    postData(data.prompt, data.tone, data.phoneNumber, data.purpose);
   };
 
   // const firstContentRef = useRef(null);
@@ -46,7 +48,6 @@ export default function Dashboard() {
   return (
     <AuroraBackground className={"h-fit"}>
       <div className="flex flex-col w-full items-center justify-center w-full overflow-hidden">
-        
         <div className="overflow-hidden p-5 rounded-md w-full h-screen flex items-center justify-center flex flex-col gap-4">
           <label className="text-8xl font-sans font-semibold">Call Me Maybe</label>
           <label className="text-2xl font-san font-medium "> Speak Less, Achieve More</label>
@@ -69,7 +70,7 @@ export default function Dashboard() {
                     fullWidth
                     size="small"
                     multiline
-                    rows={4} 
+                    rows={4}
                     value={field.value ?? ""}
                     onChange={field.onChange}
                     error={!!fieldState.error}

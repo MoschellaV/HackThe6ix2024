@@ -1,9 +1,9 @@
 // add apis here
-import axiosInstance from "./axiosInstance";
+import axios from "axios";
 
 export const postData = async (prompt, tone, phoneNumber, purpose) => {
   try {
-    await axiosInstance.post(process.env.NEXT_PUBLIC_START_CALL_ROUTE, {
+    await axios.post(process.env.NEXT_PUBLIC_START_CALL_ROUTE, {
       prompt: prompt,
       tone: tone,
       phoneNumber: phoneNumber,
