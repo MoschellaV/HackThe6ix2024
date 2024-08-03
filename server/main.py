@@ -17,6 +17,7 @@ from google.cloud import speech_v1p1beta1 as speech
 import firebase_admin
 from firebase_admin import initialize_app, firestore, credentials, storage
 import uuid
+import time
 
 cred = credentials.Certificate('./service-account-key.json')
 initialize_app(cred)
@@ -28,7 +29,7 @@ bucket = storage.bucket("hackthe6ix-83702.appspot.com")
 from generate_text import generate_text
 from generate_speech import text_to_speech
 from utils import check_string_length
-from db.operations import upload_audio, update_completion_status, update_recording_url
+from db.operations import upload_audio, update_completion_status, update_recording_url, update_field
 # from twilio.operations import get_recording
 
 load_dotenv()
@@ -72,8 +73,10 @@ async def start_call(req: RequestModel, background_tasks: BackgroundTasks):
     update_completion_status(data["id"], "Generating custom message")
     initial_response = generate_text(data["prompt"], data["tone"], data["purpose"], data["lengthOfCall"])
     check_string_length(initial_response.content, 10000)
+    update_field(data["id"], "textContent", initial_response.content)
 
     print(initial_response.content)
+    time.sleep(2)
     update_completion_status(data["id"], "Creating speech")
     audio_file = text_to_speech(initial_response.content, data["voice"], eleven_labs_api_key)
 
