@@ -1,5 +1,5 @@
 "use client";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -13,16 +13,42 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { postData, saveCallData } from "@/services/api";
-
-
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "@/firebase/firebaseConfig";
+import ShowCompletionProgress from "@/components/ShowCompletionProgress";
+import { CircularProgress } from "@mui/material";
 
 export default function Dashboard() {
+  const [submissionId, setSubmissionId] = useState();
+  const [activeDoc, setActiveDoc] = useState(null);
+
+  useEffect(() => {
+    if (submissionId) {
+      const unsub = onSnapshot(
+        doc(db, "calls", submissionId),
+        doc => {
+          if (doc.exists()) {
+            console.log("Document data:", doc.data());
+            setActiveDoc(doc.data());
+          } else {
+            console.log("No such document!");
+          }
+        },
+        error => {
+          console.log("Error getting document:", error);
+        }
+      );
+
+      // Cleanup function to unsubscribe from the listener when the component unmounts
+      return () => unsub();
+    }
+  }, [submissionId]);
+
   const schema = z.object({
     prompt: z.string().min(1, { message: "Required" }),
     purpose: z.string().min(1, { message: "Required" }),
     phoneNumber: z.string().min(10, { message: "Phone number must be at least 10 digits" }),
     lengthOfCall: z.enum(["small", "medium", "large"], { errorMap: () => ({ message: "Required" }) }),
-
 
     tone: z.enum(["Flirty", "Funny", "Mean", "Normal"], { errorMap: () => ({ message: "Required" }) }),
     voice: z.enum(["pqHfZKP75CvOlQylNhV4", "jsCqWAovK2LkecY7zXl4", "bIHbv24MWmeRgasZH58o", "ThT5KcBeYPX3keUQqHPh"], {
@@ -48,15 +74,13 @@ export default function Dashboard() {
       const { id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall, createdAt, completionStatus, recordingURL } =
         savedData.data.document;
 
+      setSubmissionId(id);
+
       postData(id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall);
     } else {
       console.log("Error saving data");
     }
   };
-
-  const [id, setId] = useState()
-
-
 
   return (
     <AuroraBackground className={"h-fit"}>
@@ -75,10 +99,27 @@ export default function Dashboard() {
 
               <Controller
                 control={control}
+                name="purpose"
+                render={({ field, fieldState }) => (
+                  <TextField
+                    label="Call subject (ex. Reminder for dad)"
+                    variant="outlined"
+                    fullWidth
+                    size="small"
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
                 name="prompt"
                 render={({ field, fieldState }) => (
                   <TextField
-                    label="What would you like to do?"
+                    label="Call message (ex. Don't forget to pick up the milk)"
                     variant="outlined"
                     fullWidth
                     size="small"
@@ -94,27 +135,10 @@ export default function Dashboard() {
 
               <Controller
                 control={control}
-                name="purpose"
-                render={({ field, fieldState }) => (
-                  <TextField
-                    label="What is the purpose for your call?"
-                    variant="outlined"
-                    fullWidth
-                    size="small"
-                    value={field.value ?? ""}
-                    onChange={field.onChange}
-                    error={!!fieldState.error}
-                    helperText={fieldState.error?.message}
-                  />
-                )}
-              />
-
-              <Controller
-                control={control}
                 name="phoneNumber"
                 render={({ field, fieldState }) => (
                   <TextField
-                    label="Phone Number"
+                    label="Recipient Phone Number"
                     type="tel"
                     variant="outlined"
                     fullWidth
@@ -128,73 +152,71 @@ export default function Dashboard() {
               />
 
               <div className="flex flex-row w-full gap-2">
+                <Controller
+                  control={control}
+                  name="lengthOfCall"
+                  render={({ field, fieldState }) => (
+                    <div className="flex flex-col w-full">
+                      <FormControl variant="outlined" size="small" fullWidth>
+                        <InputLabel>Length of Call</InputLabel>
+                        <Select {...field} label="Length of Call" error={!!fieldState.error}>
+                          <MenuItem value="small">Short</MenuItem>
+                          <MenuItem value="medium">Medium</MenuItem>
+                          <MenuItem value="large">Large</MenuItem>
+                        </Select>
+                        {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
+                      </FormControl>
+                    </div>
+                  )}
+                />
 
-              <Controller
-                control={control}
-                name="lengthOfCall"
-                render={({ field, fieldState }) => (
-                  <div className="flex flex-col w-full">
-                    <FormControl variant="outlined" size="small" fullWidth>
-                      <InputLabel>Length of Call</InputLabel>
-                      <Select {...field} label="AI Tone" error={!!fieldState.error}>
-                        <MenuItem value="small">Small 🥰</MenuItem>
-                        <MenuItem value="medium">Medium 😂</MenuItem>
-                        <MenuItem value="large">Large 😡</MenuItem>
-                      </Select>
-                      {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
-                    </FormControl>
-                  </div>
-                )}
-              />
+                <Controller
+                  control={control}
+                  name="tone"
+                  render={({ field, fieldState }) => (
+                    <div className="flex flex-col w-full">
+                      <FormControl variant="outlined" size="small" fullWidth>
+                        <InputLabel>Tone</InputLabel>
+                        <Select {...field} label="Tone" error={!!fieldState.error}>
+                          <MenuItem value="Flirty">Flirty 🥰</MenuItem>
+                          <MenuItem value="Funny">Funny 😂</MenuItem>
+                          <MenuItem value="Mean">Mean 😡</MenuItem>
+                          <MenuItem value="Normal">Normal 😐</MenuItem>
+                        </Select>
+                        {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
+                      </FormControl>
+                    </div>
+                  )}
+                />
 
-              <Controller
-                control={control}
-                name="tone"
-                render={({ field, fieldState }) => (
-                  <div className="flex flex-col w-full">
-                    <FormControl variant="outlined" size="small" fullWidth>
-                      <InputLabel>AI Tone</InputLabel>
-                      <Select {...field} label="AI Tone" error={!!fieldState.error}>
-                        <MenuItem value="Flirty">Flirty 🥰</MenuItem>
-                        <MenuItem value="Funny">Funny 😂</MenuItem>
-                        <MenuItem value="Mean">Mean 😡</MenuItem>
-                        <MenuItem value="Normal">Normal 😐</MenuItem>
-                      </Select>
-                      {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
-                    </FormControl>
-                  </div>
-                )}
-              />
-
-              <Controller
-                control={control}
-                name="voice"
-                render={({ field, fieldState }) => (
-                  <div className="flex flex-col w-full">
-                    <FormControl variant="outlined" size="small" fullWidth>
-                      <InputLabel>AI Voice</InputLabel>
-                      <Select {...field} label="AI Voice" error={!!fieldState.error}>
-                        <MenuItem value="pqHfZKP75CvOlQylNhV4">Bill</MenuItem>
-                        <MenuItem value="jsCqWAovK2LkecY7zXl4">Freya</MenuItem>
-                        <MenuItem value="bIHbv24MWmeRgasZH58o">Will</MenuItem>
-                        <MenuItem value="ThT5KcBeYPX3keUQqHPh">Dorothy</MenuItem>
-                      </Select>
-                      {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
-                    </FormControl>
-                  </div>
-                )}
-              />
+                <Controller
+                  control={control}
+                  name="voice"
+                  render={({ field, fieldState }) => (
+                    <div className="flex flex-col w-full">
+                      <FormControl variant="outlined" size="small" fullWidth>
+                        <InputLabel>Voice</InputLabel>
+                        <Select {...field} label="Voice" error={!!fieldState.error}>
+                          <MenuItem value="pqHfZKP75CvOlQylNhV4">Bill</MenuItem>
+                          <MenuItem value="jsCqWAovK2LkecY7zXl4">Freya</MenuItem>
+                          <MenuItem value="bIHbv24MWmeRgasZH58o">Will</MenuItem>
+                          <MenuItem value="ThT5KcBeYPX3keUQqHPh">Dorothy</MenuItem>
+                        </Select>
+                        {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
+                      </FormControl>
+                    </div>
+                  )}
+                />
               </div>
 
-              <Button 
-              sx={{borderRadius: '8px'}}
-              fullWidth
-              variant="contained"
-              type="submit">Submit</Button>
+              <Button sx={{ borderRadius: "8px" }} fullWidth variant="contained" type="submit">
+                Submit
+              </Button>
             </div>
           </div>
         </form>
       </div>
+      {submissionId && (activeDoc ? <ShowCompletionProgress docData={activeDoc} /> : <CircularProgress />)}
     </AuroraBackground>
   );
 }
