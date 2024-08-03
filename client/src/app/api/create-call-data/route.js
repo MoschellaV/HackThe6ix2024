@@ -15,7 +15,8 @@ export async function POST(request) {
       purpose: purpose,
       voice: voice,
       lengthOfCall: lengthOfCall,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      completionStatus: "pending"
     };
 
     await docRef.set(newDoc);
