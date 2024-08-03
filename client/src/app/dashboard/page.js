@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -13,6 +13,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { postData, saveCallData } from "@/services/api";
+
+import { onSnapshot, doc } from "firebase/firestore";
 
 export default function Dashboard() {
   const schema = z.object({
@@ -51,6 +53,13 @@ export default function Dashboard() {
       console.log("Error saving data");
     }
   };
+
+  const [id, setId] = useState()
+
+  useEffect(() => {
+    console.log("test")
+    onSnapshot(doc(db))
+  }, [id])
 
   return (
     <AuroraBackground className={"h-fit"}>
@@ -167,7 +176,7 @@ export default function Dashboard() {
                 render={({ field, fieldState }) => (
                   <div className="flex flex-col w-full">
                     <FormControl variant="outlined" size="small" fullWidth>
-                      <InputLabel>AI Tone</InputLabel>
+                      <InputLabel>AI Voice</InputLabel>
                       <Select {...field} label="AI Tone" error={!!fieldState.error}>
                         <MenuItem value="pqHfZKP75CvOlQylNhV4">Bill</MenuItem>
                         <MenuItem value="jsCqWAovK2LkecY7zXl4">Freya</MenuItem>
