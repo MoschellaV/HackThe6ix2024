@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { postData, saveCallData } from "@/services/api";
 
-import { onSnapshot, doc } from "firebase/firestore";
+
 
 export default function Dashboard() {
   const schema = z.object({
@@ -56,10 +56,7 @@ export default function Dashboard() {
 
   const [id, setId] = useState()
 
-  useEffect(() => {
-    console.log("test")
-    onSnapshot(doc(db))
-  }, [id])
+
 
   return (
     <AuroraBackground className={"h-fit"}>
@@ -150,7 +147,6 @@ export default function Dashboard() {
                 )}
               />
 
-
               <Controller
                 control={control}
                 name="tone"
@@ -177,7 +173,7 @@ export default function Dashboard() {
                   <div className="flex flex-col w-full">
                     <FormControl variant="outlined" size="small" fullWidth>
                       <InputLabel>AI Voice</InputLabel>
-                      <Select {...field} label="AI Tone" error={!!fieldState.error}>
+                      <Select {...field} label="AI Voice" error={!!fieldState.error}>
                         <MenuItem value="pqHfZKP75CvOlQylNhV4">Bill</MenuItem>
                         <MenuItem value="jsCqWAovK2LkecY7zXl4">Freya</MenuItem>
                         <MenuItem value="bIHbv24MWmeRgasZH58o">Will</MenuItem>
