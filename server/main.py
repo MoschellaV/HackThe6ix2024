@@ -76,7 +76,7 @@ async def start_call(req: RequestModel, background_tasks: BackgroundTasks):
     update_field(data["id"], "textContent", initial_response.content)
 
     print(initial_response.content)
-    time.sleep(2)
+    
     update_completion_status(data["id"], "Creating speech")
     audio_file = text_to_speech(initial_response.content, data["voice"], eleven_labs_api_key)
 

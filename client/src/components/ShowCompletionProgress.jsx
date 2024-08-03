@@ -4,32 +4,41 @@ import React, { useEffect, useState } from "react";
 
 export default function ShowCompletionProgress({ docData }) {
   const currentVoice = voices[docData.voice];
-  //   console.log(docData);
   const [statusList, setStatusList] = useState([]);
-  const [hasShownTextContent, setHasShownTextContent] = useState(false);
-  //   console.log(docData);
+  const [lastStatus, setLastStatus] = useState(null);
+  const [lastCompletionStatus, setLastCompletionStatus] = useState(null);
 
   useEffect(() => {
-    if (docData.completionStatus) {
-      if (docData.completionStatus === "Generating custom message") {
-        setHasShownTextContent(false);
-        setStatusList(prevList => [...prevList, { title: docData.completionStatus, change: "" }]);
-      } else if (docData.textContent && !hasShownTextContent) {
-        setHasShownTextContent(true);
-        setStatusList(prevList => [...prevList, { title: "", change: docData.textContent }]);
-      } else if (docData.completionStatus === "Creating speech") {
+    if (docData.completionStatus && docData.completionStatus !== lastCompletionStatus) {
+      if (docData.completionStatus === "Making call") {
         setStatusList(prevList => [
           ...prevList,
-          { title: docData.completionStatus, change: "Converting text to voice audio, woop!" }
+          { text: docData.completionStatus, type: "title" },
+          { text: "Ring, ring, ring ring...", type: "change" }
         ]);
-      } else if (docData.completionStatus === "Making call") {
+        setLastCompletionStatus(docData.completionStatus);
+      }
+
+      if (docData.completionStatus === "Creating speech") {
         setStatusList(prevList => [
           ...prevList,
-          { title: docData.completionStatus, change: "Ring, ring, ring ring..." }
+          { text: docData.completionStatus, type: "title" },
+          { text: "Converting text to voice audio, woop!", type: "change" }
         ]);
+        setLastCompletionStatus(docData.completionStatus);
+      }
+
+      if (docData.completionStatus === "Generating custom message" && !docData.textContent) {
+        setStatusList(prevList => [...prevList, { text: docData.completionStatus, type: "title" }]);
+        setLastCompletionStatus(docData.completionStatus);
       }
     }
-  }, [docData.completionStatus]);
+
+    if (docData.textContent !== null && docData.textContent !== lastStatus) {
+      setStatusList(prevList => [...prevList, { text: docData.textContent, type: "change" }]);
+      setLastStatus(docData.textContent);
+    }
+  }, [docData.completionStatus, docData.textContent]);
 
   return (
     <Box sx={{ height: "100vh", width: "100vw", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -50,17 +59,23 @@ export default function ShowCompletionProgress({ docData }) {
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
-            <div className="h-full bg-transparent p-8 rounded-lg flex flex-col shadow-lg overflow-auto">
+            <div
+              className="h-full bg-transparent p-8 rounded-lg flex flex-col shadow-lg"
+              style={{ overflow: "auto", maxHeight: "70vh" }}>
               <Box sx={{ p: 3 }}>
                 <Stack spacing={1}>
                   {statusList.map((status, index) => (
                     <div key={index}>
-                      <Typography variant="body1" sx={{ fontSize: 16, mb: 0.5 }}>
-                        {status.title}
-                      </Typography>
-                      <Typography variant="body1" sx={{ fontWeight: 500, mb: 0.5, opacity: 0.4 }}>
-                        {status.change}
-                      </Typography>
+                      {status.type === "title" && (
+                        <Typography variant="body1" sx={{ fontSize: 16 }}>
+                          {status.text}
+                        </Typography>
+                      )}
+                      {status.type === "change" && (
+                        <Typography variant="body1" sx={{ fontWeight: 500, opacity: 0.4 }}>
+                          {status.text}
+                        </Typography>
+                      )}
                     </div>
                   ))}
                 </Stack>
