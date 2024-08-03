@@ -4,3 +4,5 @@ openai~=1.36.1
 python-dotenv
 uvicorn
 twilio
+google-cloud-speech
+firebase_admin

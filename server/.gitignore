@@ -2,3 +2,5 @@
 *env
 *.env.local
 *.env
+service-account-key.json
+output.mp3

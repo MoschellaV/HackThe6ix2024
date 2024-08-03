@@ -1,10 +1,9 @@
 import requests
 import os
 
-CHUNK_SIZE = 1024
-eleven_labs_api_key = os.getenv('ELEVEN_LABS_API_KEY')
-
-def text_to_speech(input_text, voice_id):
+def text_to_speech(input_text, voice_id, eleven_labs_api_key):
+    try:
+        CHUNK_SIZE = 1024
         url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
 
         headers = {
@@ -23,7 +22,16 @@ def text_to_speech(input_text, voice_id):
         }
 
         response = requests.post(url, json=data, headers=headers)
-        with open('output.mp3', 'wb') as f:
-                for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
-                        if chunk:
-                                f.write(chunk)
+        response.raise_for_status()
+
+    except requests.exceptions.RequestException as err:
+        print(f"Error occurred: {err}")
+        return None
+
+    audio_file = 'output.mp3'
+    with open('output.mp3', 'wb') as f:
+        for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
+            if chunk:
+                f.write(chunk)
+
+    return audio_file

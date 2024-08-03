@@ -3,16 +3,29 @@ Activate virtual environment: source env/bin/activate
 To run server: uvicorn main:app --reload       
 '''
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import openai
 from dotenv import load_dotenv
 import os
 from twilio.rest import Client
+from twilio.twiml.voice_response import VoiceResponse
+from google.cloud import speech_v1p1beta1 as speech
+import firebase_admin
+from firebase_admin import initialize_app, firestore, credentials, storage
+
+cred = credentials.Certificate('./service-account-key.json')
+initialize_app(cred)
+
+db = firestore.client()
+bucket = storage.bucket("hackthe6ix-83702.appspot.com")
+
 
 from generate_text import generate_text
 from generate_speech import text_to_speech
+from utils import check_string_length
+from db.operations import upload_audio
 
 load_dotenv()
 
@@ -31,6 +44,8 @@ class RequestModel(BaseModel):
     tone: str
     phoneNumber: str
     purpose: str
+    voice: str
+    lengthOfCall: str
 
 
 app = FastAPI()
@@ -49,11 +64,24 @@ app.add_middleware(
 
 
 @app.post("/start-call")
-async def root(req: RequestModel):
-
+async def start_call(req: RequestModel, background_tasks: BackgroundTasks):
     data = req.dict()
-    # response = generate_text(data["prompt"], data["tone"], data["purpose"])
-    # print(response)
+    initial_response = generate_text(data["prompt"], data["tone"], data["purpose"], data["lengthOfCall"])
 
-    response = text_to_speech("This is just a test", "onwK4e9ZLuTAKqWW03F9")
-    return {"message": response}
+    check_string_length(initial_response.content, 10000)
+    print(initial_response.content)
+    audio_file = text_to_speech(initial_response.content, data["voice"], eleven_labs_api_key)
+
+    file_path = upload_audio(audio_file, bucket)
+    print(file_path)
+    twiml = VoiceResponse()
+    twiml.play(file_path)
+
+    call = client.calls.create(
+            to=req.phoneNumber,
+            from_=twilio_number,
+            twiml=twiml
+    )
+    print(call.sid)
+    return {"message": "Call initiated", "call_sid": call.sid}
+    
