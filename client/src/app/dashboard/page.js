@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [purpose, setPurpose] = useState("");
 
   const handleClick = () => {
-    postData({ value, phoneNumber, purpose });
+    postData({ value, tone, phoneNumber, purpose });
   };
 
   return (
