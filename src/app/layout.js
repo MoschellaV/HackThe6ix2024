@@ -1,3 +1,4 @@
+import { UserContextProvider } from '@/context/UserContext';
 import './globals.css';
 import ThemeRegistry from './ThemeRegistry';
 
@@ -10,7 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <ThemeRegistry options={{ key: 'mui' }}>
       <html lang="en">
-        <body>{children}</body>
+        <body>
+          <UserContextProvider>{children}</UserContextProvider>
+        </body>
       </html>
     </ThemeRegistry>
   );

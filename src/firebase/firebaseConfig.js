@@ -1,8 +1,9 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getAnalytics } from 'firebase/analytics';
-import { getFirestore } from 'firebase/firestore';
-import { getFunctions } from 'firebase/functions';
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getFunctions } from "firebase/functions";
+
+console.log(process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -33,10 +34,3 @@ export { auth };
 // functions
 // const functions = getFunctions(app, "us-central1");
 // export { functions };
-
-// analytics
-let analytics;
-if (typeof window != 'undefined') {
-  analytics = getAnalytics(app);
-}
-export { analytics };
