@@ -11,7 +11,8 @@ export const voices = {
   pqHfZKP75CvOlQylNhV4: {
     name: "Bill",
     description: "I love being in the wilderness, away from civilization and at one with nature.",
-    img: billImg
+    img: billImg,
+    voice: billMP3
   },
   jsCqWAovK2LkecY7zXl4: {
     name: "Freya",
