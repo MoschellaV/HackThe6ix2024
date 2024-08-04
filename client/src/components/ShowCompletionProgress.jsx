@@ -51,7 +51,7 @@ export default function ShowCompletionProgress({ docData }) {
             md={6}
             sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
             <Box sx={{ p: { sm: 2, md: 5, lg: 7 }, display: "flex", alignItems: "center", flexDirection: "column" }}>
-              <Image src={currentVoice.img} alt="Voice" width={300} height={300} />
+              <Image src={currentVoice.img} alt="Voice" width={200} height={200} draggable={false} />
               <Typography variant="h3" sx={{ textAlign: "center", my: 2 }}>
                 {currentVoice.name}
               </Typography>
