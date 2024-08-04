@@ -156,7 +156,8 @@ export default function Dashboard() {
                 sx={{
                   width: 1 / 3,
                   borderRadius: "8px",
-                  mt: 2
+                  mt: 2,
+                  fontWeight: 600
                 }}
                 onClick={() => formRef.current.scrollIntoView({ behavior: "smooth" })}>
                 Try us out!
@@ -409,7 +410,7 @@ export default function Dashboard() {
                 )}
 
                 <Button sx={{ borderRadius: "8px" }} fullWidth variant="contained" type="submit" disabled={loading}>
-                  Make your call!
+                  Make call
                 </Button>
               </div>
               <div className="mt-32"></div>
