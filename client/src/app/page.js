@@ -211,7 +211,7 @@ export default function Home() {
                   name="phoneNumber"
                   render={({ field, fieldState }) => (
                     <TextField
-                      label="Recipient Phone Number"
+                      label="Recipient phone number"
                       type="tel"
                       variant="outlined"
                       fullWidth
