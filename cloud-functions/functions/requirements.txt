@@ -1,0 +1,9 @@
+firebase_functions~=0.1.0
+# fastapi~=0.112.0
+requests
+openai~=1.36.1
+python-dotenv
+# uvicorn
+twilio
+google-cloud-speech
+firebase_admin
