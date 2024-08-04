@@ -56,10 +56,12 @@ export default function Home() {
   const [activeDoc, setActiveDoc] = useState(null);
   const [loading, setLoading] = useState(false);
   const [openAdvanced, setOpenAdvanced] = useState(false);
+  const [isProgressActive, setIsProgressActive] = useState(false);
 
   const actors = [{ name: "Billy" }, { name: "Mike" }, { name: "Freya" }, { name: "Dorthy" }];
   const formRef = useRef(null);
   const progressRef = useRef(null);
+  
 
   useEffect(() => {
     if (submissionId) {
@@ -135,10 +137,13 @@ export default function Home() {
       postData(id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall, stability, similarity);
       setLoading(false);
 
-      let element = document.getElementById("call-progress");
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
-      }
+      setIsProgressActive(true);  
+      setTimeout(() => {
+        let element = document.getElementById("call-progress");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+        }
+      }, 100); 
     } else {
       setLoading(false);
       console.log("Error saving data");
@@ -430,15 +435,8 @@ export default function Home() {
         </div>
       </AuroraBackground>
 
-      <div ref={progressRef} id="call-progress">
-        {submissionId &&
-          (activeDoc ? (
-            <div ref={progressRef} className="w-full h-screen">
-              <ShowCompletionProgress docData={activeDoc} />
-            </div>
-          ) : (
-            <CircularProgress />
-          ))}
+      <div ref={progressRef} id="call-progress" className={`${isProgressActive ? 'w-full h-screen' : ''}`}>
+        {submissionId && (activeDoc ? <ShowCompletionProgress docData={activeDoc} /> : <CircularProgress />)}
       </div>
     </>
   );
