@@ -38,7 +38,7 @@ def return_response(prompt, tone, purpose, lengthOfCall):
     elif tone == "Funny":
         additional_tone_info = "Feel free to be casual and friendly. Add in a few jokes to make the conversation more engaging and light-hearted. Try to make the other person laugh and smile."
     elif tone == "Mean":
-        additional_tone_info = "Make sure to provide all the necessary information. Avoid being friendly at all, be mean and say nasty things to the other person on the line. Be angry at everything they might have done which upsets you. Insult them where possible to make it clear you dislike them. As mean as I need you to be, you must be."
+        additional_tone_info = "Make sure to provide all the necessary information. Avoid being friendly at all, be a little mean/bitter and speak nasty to the other person on the line. Be angry/frusterated at everything they might have done which upsets you. Make it clear you dislike them."
     elif tone == "Normal":
         additional_tone_info = "Make sure to provide all the necessary information. Keep the conversation casual and friendly. Be respectful and speak in an unemotional tone."
 
