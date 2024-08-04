@@ -66,7 +66,6 @@ export default function Dashboard() {
   const formRef = useRef(null);
   const progressRef = useRef(null);
 
-
   useEffect(() => {
     if (submissionId) {
       const unsub = onSnapshot(
@@ -140,7 +139,7 @@ export default function Dashboard() {
 
       postData(id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall, stability, similarity);
       setLoading(false);
-      progressRef.current.scrollIntoView({ behavior: "smooth" })
+      progressRef.current.scrollIntoView({ behavior: "smooth" });
     } else {
       setLoading(false);
       console.log("Error saving data");
@@ -161,10 +160,11 @@ export default function Dashboard() {
                 variant="contained"
                 sx={{
                   width: 1 / 3,
-                  borderRadius: "8px"
+                  borderRadius: "8px",
+                  mt: 2
                 }}
                 onClick={() => formRef.current.scrollIntoView({ behavior: "smooth" })}>
-                Go To Form
+                Try us out!
               </Button>
             </div>
             <div className="flex flex-row w-full justify-between p-4">
@@ -177,9 +177,8 @@ export default function Dashboard() {
                     key={index}
                     style={{
                       marginTop: index === 0 || index === actors.length - 1 ? "-100px" : "0px",
-                      ...floatingStyle,
-                    }}
-                  >
+                      ...floatingStyle
+                    }}>
                     <Card sx={{ width: "300px", height: "230px" }} variant="outlined">
                       <CardContent>
                         <div className="flex flex-row gap-4">
@@ -204,8 +203,7 @@ export default function Dashboard() {
                                   onClick={() => {
                                     const audio = new Audio(voices[key].voice);
                                     audio.play();
-                                  }}
-                                >
+                                  }}>
                                   <div className="flex flex-row items-center">
                                     <PlayCircleOutlineIcon />
                                     Play {voices[key].name}
