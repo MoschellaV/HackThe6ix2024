@@ -16,14 +16,9 @@ import { postData, saveCallData } from "@/services/api";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import ShowCompletionProgress from "@/components/ShowCompletionProgress";
-import { Box, CircularProgress, Slider, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Slider, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-
 import Image from "next/image";
 
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
@@ -154,7 +149,7 @@ export default function Dashboard() {
             id="Header"
             className="overflow-hidden p-5 rounded-md w-full h-screen flex items-center justify-center flex-col gap-20">
             <div className="w-full flex flex-col items-center justify-center gap-2">
-              <label className="text-8xl font-sans font-semibold mt-10">Call Me Maybe</label>{" "}
+              <label className="text-8xl font-sans font-semibold mt-10 text-center">Call Me Maybe</label>{" "}
               <label className="text-2xl font-san font-medium">Speak Less, Achieve More</label>
               <Button
                 variant="contained"
@@ -179,42 +174,54 @@ export default function Dashboard() {
                       marginTop: index === 0 || index === actors.length - 1 ? "-100px" : "0px",
                       ...floatingStyle
                     }}>
-                    <Card sx={{ width: "300px", height: "230px" }} variant="outlined">
-                      <CardContent>
-                        <div className="flex flex-row gap-4">
-                          <div className="flex-shrink-0">
-                            <Image
-                              src={item.img}
-                              width={140}
-                              height={140}
-                              alt="Picture of the author"
-                              style={{ objectFit: "contain" }}
-                            />
+                    <Grid
+                      container
+                      rowSpacing={1}
+                      sx={{
+                        width: "300px",
+                        height: "250px",
+                        backgroundColor: "rgba(246, 246, 246, 0.4)",
+                        borderRadius: "8px",
+                        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.10)",
+                        p: 2
+                      }}>
+                      <Grid item xs={6} md={6} sx={{ position: "relative", height: "70%" }}>
+                        <Image src={item.img} fill alt="Picture of the author" style={{ objectFit: "contain" }} />
+                      </Grid>
+
+                      <Grid
+                        item
+                        xs={6}
+                        md={6}
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}>
+                        <Typography variant="body1" sx={{ textAlign: "center", mb: 1, fontWeight: 600 }}>
+                          {item.name}
+                        </Typography>
+                        <Typography variant="body1" sx={{ textAlign: "center", fontSize: 14 }}>
+                          {item.description}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button
+                          fullWidth
+                          sx={{ border: "1px solid rgb(57, 100, 239)" }}
+                          key={key}
+                          onClick={() => {
+                            const audio = new Audio(voices[key].voice);
+                            audio.play();
+                          }}>
+                          <div className="flex flex-row items-center">
+                            <PlayCircleOutlineIcon sx={{ mr: 1 }} />
+                            Play {voices[key].name}'s voice
                           </div>
-                          <div className="flex flex-col justify-between flex-grow">
-                            <div className="flex flex-col">
-                              <label className="text-sm text-gray-800 font-semibold">{item.name}</label>
-                              <label className="text-xs text-gray-500 text-medium">{item.description}</label>
-                            </div>
-                            <CardActions className="w-full text-right">
-                              <div className="w-full text-left">
-                                <Button
-                                  key={key}
-                                  onClick={() => {
-                                    const audio = new Audio(voices[key].voice);
-                                    audio.play();
-                                  }}>
-                                  <div className="flex flex-row items-center">
-                                    <PlayCircleOutlineIcon />
-                                    Play {voices[key].name}
-                                  </div>
-                                </Button>
-                              </div>
-                            </CardActions>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        </Button>
+                      </Grid>
+                    </Grid>
                   </div>
                 );
               })}
@@ -402,7 +409,7 @@ export default function Dashboard() {
                 )}
 
                 <Button sx={{ borderRadius: "8px" }} fullWidth variant="contained" type="submit" disabled={loading}>
-                  Submit
+                  Make your call!
                 </Button>
               </div>
               <div className="mt-32"></div>
