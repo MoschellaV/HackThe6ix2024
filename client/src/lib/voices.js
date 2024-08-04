@@ -15,22 +15,19 @@ export const voices = {
   },
   jsCqWAovK2LkecY7zXl4: {
     name: "Freya",
-    description:
-      "Bill loves isn't afraid of doing things the hard way, and hey that's why they call him called dirty Bill.",
+    description: "I go where the wind takes me. It took me to the couch.",
     img: freyaImg,
     voice: freyaMP3
   },
   bIHbv24MWmeRgasZH58o: {
     name: "Will",
-    description:
-      "Bill loves isn't afraid of doing things the hard way, and hey that's why they call him called dirty Bill.",
+    description: "I’m ready to have some fun and write my destiny.",
     img: willImg,
     voice: willMP3
   },
   ThT5KcBeYPX3keUQqHPh: {
     name: "Dorothy",
-    description:
-      "Bill loves isn't afraid of doing things the hard way, and hey that's why they call him called dirty Bill.",
+    description: "Come to me, my children. Spread your inner butterfly’s love.",
     img: dorothyImg,
     voice: dorothyMP3
   }
