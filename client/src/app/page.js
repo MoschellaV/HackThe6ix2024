@@ -32,7 +32,6 @@ export default function Home() {
 
   const formRef = useRef(null);
   const progressRef = useRef(null);
-  
 
   useEffect(() => {
     if (submissionId) {
@@ -59,7 +58,7 @@ export default function Home() {
     prompt: z.string().min(1, { message: "Required" }),
     purpose: z.string().min(1, { message: "Required" }),
     phoneNumber: z.string().min(10, { message: "Phone number must be at least 10 digits" }),
-    lengthOfCall: z.enum(["small", "medium", "large"], { errorMap: () => ({ message: "Required" }) }),
+    lengthOfCall: z.enum(["short", "medium", "long"], { errorMap: () => ({ message: "Required" }) }),
     tone: z.enum(["Flirty", "Funny", "Mean", "Normal"], { errorMap: () => ({ message: "Required" }) }),
     voice: z.enum(["pqHfZKP75CvOlQylNhV4", "jsCqWAovK2LkecY7zXl4", "bIHbv24MWmeRgasZH58o", "ThT5KcBeYPX3keUQqHPh"], {
       errorMap: () => ({ message: "Required" })
@@ -108,13 +107,13 @@ export default function Home() {
       postData(id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall, stability, similarity);
       setLoading(false);
 
-      setIsProgressActive(true);  
+      setIsProgressActive(true);
       setTimeout(() => {
         let element = document.getElementById("call-progress");
         if (element) {
           element.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
         }
-      }, 100); 
+      }, 100);
     } else {
       setLoading(false);
       console.log("Error saving data");
@@ -232,9 +231,9 @@ export default function Home() {
                         <FormControl variant="outlined" size="small" fullWidth>
                           <InputLabel>Call length</InputLabel>
                           <Select {...field} label="Call length" error={!!fieldState.error}>
-                            <MenuItem value="small">Short</MenuItem>
+                            <MenuItem value="short">Short</MenuItem>
                             <MenuItem value="medium">Medium</MenuItem>
-                            <MenuItem value="large">Large</MenuItem>
+                            <MenuItem value="long">Long</MenuItem>
                           </Select>
                           {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
                         </FormControl>
@@ -351,7 +350,7 @@ export default function Home() {
         </div>
       </AuroraBackground>
 
-      <div ref={progressRef} id="call-progress" className={`${isProgressActive ? 'w-full h-screen' : ''}`}>
+      <div ref={progressRef} id="call-progress" className={`${isProgressActive ? "w-full h-screen" : ""}`}>
         {submissionId && (activeDoc ? <ShowCompletionProgress docData={activeDoc} /> : <CircularProgress />)}
       </div>
     </>
