@@ -1,7 +1,7 @@
 // add apis here
 import axios from "axios";
 
-export const saveCallData = async (prompt, tone, phoneNumber, purpose, voice, lengthOfCall) => {
+export const saveCallData = async (prompt, tone, phoneNumber, purpose, voice, lengthOfCall, stability, similarity) => {
   try {
     const response = await axios.post(`/api/create-call-data`, {
       prompt: prompt,
@@ -9,7 +9,9 @@ export const saveCallData = async (prompt, tone, phoneNumber, purpose, voice, le
       phoneNumber: phoneNumber,
       purpose: purpose,
       voice: voice,
-      lengthOfCall: lengthOfCall
+      lengthOfCall: lengthOfCall,
+      stability: stability,
+      similarity: similarity
     });
 
     return response;
@@ -18,7 +20,7 @@ export const saveCallData = async (prompt, tone, phoneNumber, purpose, voice, le
   }
 };
 
-export const postData = async (id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall) => {
+export const postData = async (id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall, stability, similarity) => {
   try {
     await axios.post(process.env.NEXT_PUBLIC_START_CALL_ROUTE, {
       id: id,
@@ -27,7 +29,9 @@ export const postData = async (id, prompt, tone, phoneNumber, purpose, voice, le
       phoneNumber: phoneNumber,
       purpose: purpose,
       voice: voice,
-      lengthOfCall: lengthOfCall
+      lengthOfCall: lengthOfCall,
+      stability: stability,
+      similarity: similarity
     });
   } catch (error) {
     throw error;

@@ -16,7 +16,9 @@ import { postData, saveCallData } from "@/services/api";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import ShowCompletionProgress from "@/components/ShowCompletionProgress";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Slider, Typography } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -58,6 +60,7 @@ export default function Dashboard() {
   const [submissionId, setSubmissionId] = useState();
   const [activeDoc, setActiveDoc] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [openAdvanced, setOpenAdvanced] = useState(false);
 
   const actors = [{ name: "Billy" }, { name: "Mike" }, { name: "Freya" }, { name: "Dorthy" }];
   const formRef = useRef(null);
@@ -91,7 +94,9 @@ export default function Dashboard() {
     tone: z.enum(["Flirty", "Funny", "Mean", "Normal"], { errorMap: () => ({ message: "Required" }) }),
     voice: z.enum(["pqHfZKP75CvOlQylNhV4", "jsCqWAovK2LkecY7zXl4", "bIHbv24MWmeRgasZH58o", "ThT5KcBeYPX3keUQqHPh"], {
       errorMap: () => ({ message: "Required" })
-    })
+    }),
+    stability: z.number().min(0).max(1).default(0.5),
+    similarity: z.number().min(0).max(1).default(0.75)
   });
 
   const { handleSubmit, control } = useForm({
@@ -100,22 +105,38 @@ export default function Dashboard() {
 
   const onSubmit = async data => {
     setLoading(true);
+    setActiveDoc(null);
+    setSubmissionId(null);
     const savedData = await saveCallData(
       data.prompt,
       data.tone,
       data.phoneNumber,
       data.purpose,
       data.voice,
-      data.lengthOfCall
+      data.lengthOfCall,
+      data.stability,
+      data.similarity
     );
 
     if (savedData.status === 201) {
-      const { id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall, createdAt, completionStatus, recordingURL } =
-        savedData.data.document;
+      const {
+        id,
+        prompt,
+        tone,
+        phoneNumber,
+        purpose,
+        voice,
+        lengthOfCall,
+        createdAt,
+        completionStatus,
+        recordingURL,
+        stability,
+        similarity
+      } = savedData.data.document;
 
       setSubmissionId(id);
 
-      postData(id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall);
+      postData(id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall, stability, similarity);
       setLoading(false);
       document.getElementById("call-progress").scrollIntoView({ behavior: "smooth" });
     } else {
@@ -271,8 +292,8 @@ export default function Dashboard() {
                     render={({ field, fieldState }) => (
                       <div className="flex flex-col w-full">
                         <FormControl variant="outlined" size="small" fullWidth>
-                          <InputLabel>Length of Call</InputLabel>
-                          <Select {...field} label="Length of Call" error={!!fieldState.error}>
+                          <InputLabel>Call length</InputLabel>
+                          <Select {...field} label="Call length" error={!!fieldState.error}>
                             <MenuItem value="small">Short</MenuItem>
                             <MenuItem value="medium">Medium</MenuItem>
                             <MenuItem value="large">Large</MenuItem>
@@ -321,6 +342,66 @@ export default function Dashboard() {
                     )}
                   />
                 </div>
+
+                <Box sx={{ width: "100%" }}>
+                  <Box
+                    sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+                    onClick={() => setOpenAdvanced(!openAdvanced)}>
+                    <Typography variant="body2" sx={{ fontWeight: 600, fontSize: 12, opacity: 0.4, mr: 0.5 }}>
+                      Advanced settings
+                    </Typography>
+                    {openAdvanced ? <ExpandLessIcon sx={{ opacity: 0.3 }} /> : <ExpandMoreIcon sx={{ opacity: 0.3 }} />}
+                  </Box>
+                </Box>
+
+                {openAdvanced && (
+                  <>
+                    <Controller
+                      control={control}
+                      name="stability"
+                      defaultValue={0.5}
+                      render={({ field, fieldState }) => (
+                        <div className="flex flex-col w-full">
+                          <Typography sx={{ fontSize: 14, opacity: 0.6 }} id="stability-slider" gutterBottom>
+                            Stability
+                          </Typography>
+                          <Slider
+                            {...field}
+                            aria-labelledby="stability-slider"
+                            valueLabelDisplay="auto"
+                            step={0.01}
+                            min={0}
+                            max={1}
+                            error={!!fieldState.error}
+                          />
+                          {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
+                        </div>
+                      )}
+                    />
+                    <Controller
+                      control={control}
+                      name="similarity"
+                      defaultValue={0.75}
+                      render={({ field, fieldState }) => (
+                        <div className="flex flex-col w-full">
+                          <Typography sx={{ fontSize: 14, opacity: 0.6 }} id="similarity-slider" gutterBottom>
+                            Similarity
+                          </Typography>
+                          <Slider
+                            {...field}
+                            aria-labelledby="similarity-slider"
+                            valueLabelDisplay="auto"
+                            step={0.01}
+                            min={0}
+                            max={1}
+                            error={!!fieldState.error}
+                          />
+                          {fieldState.error && <FormHelperText error>{fieldState.error.message}</FormHelperText>}
+                        </div>
+                      )}
+                    />
+                  </>
+                )}
 
                 <Button sx={{ borderRadius: "8px" }} fullWidth variant="contained" type="submit" disabled={loading}>
                   Submit
