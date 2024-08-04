@@ -1,7 +1,7 @@
-import billImg from "../assets/images/bill.jpg";
-import dorothyImg from "../assets/images/dorothy.jpg";
-import freyaImg from "../assets/images/freya.jpg";
-import willImg from "../assets/images/will.jpg";
+import billImg from "../assets/images/bill.png";
+import dorothyImg from "../assets/images/dorothy.png";
+import freyaImg from "../assets/images/freya.png";
+import willImg from "../assets/images/will.png";
 
 export const voices = {
   pqHfZKP75CvOlQylNhV4: {

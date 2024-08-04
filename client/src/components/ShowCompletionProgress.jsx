@@ -1,5 +1,6 @@
 import { voices } from "@/lib/voices";
 import { Box, Grid, Stack, Typography } from "@mui/material";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 export default function ShowCompletionProgress({ docData }) {
@@ -49,11 +50,12 @@ export default function ShowCompletionProgress({ docData }) {
             xs={12}
             md={6}
             sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <Box sx={{ p: { sm: 2, md: 5, lg: 7 } }}>
-              <Typography variant="h3" sx={{ textAlign: "center", mb: 2 }}>
+            <Box sx={{ p: { sm: 2, md: 5, lg: 7 }, display: "flex", alignItems: "center", flexDirection: "column" }}>
+              <Image src={currentVoice.img} alt="Voice" width={300} height={300} />
+              <Typography variant="h3" sx={{ textAlign: "center", my: 2 }}>
                 {currentVoice.name}
               </Typography>
-              <Typography variant="body1" sx={{ textAlign: "center" }}>
+              <Typography variant="body1" sx={{ textAlign: "center", fontSize: 16 }}>
                 {currentVoice.description}
               </Typography>
             </Box>
@@ -72,7 +74,7 @@ export default function ShowCompletionProgress({ docData }) {
                         </Typography>
                       )}
                       {status.type === "change" && (
-                        <Typography variant="body1" sx={{ fontWeight: 500, opacity: 0.4 }}>
+                        <Typography variant="body1" sx={{ fontWeight: 500, opacity: 0.6 }}>
                           {status.text}
                         </Typography>
                       )}

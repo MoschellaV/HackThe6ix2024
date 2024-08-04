@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   try {
-    const { prompt, tone, phoneNumber, purpose, voice, lengthOfCall } = await request.json();
+    const { prompt, tone, phoneNumber, purpose, voice, lengthOfCall, stability, similarity } = await request.json();
 
     const docRef = db.collection("calls").doc();
 
@@ -18,7 +18,9 @@ export async function POST(request) {
       createdAt: new Date().toISOString(),
       completionStatus: "pending",
       recordingURL: null,
-      textContent: null
+      textContent: null,
+      stability: stability,
+      similarity: similarity
     };
 
     await docRef.set(newDoc);

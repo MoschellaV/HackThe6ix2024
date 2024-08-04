@@ -1,7 +1,7 @@
 import requests
 import os
 
-def text_to_speech(input_text, voice_id, eleven_labs_api_key):
+def text_to_speech(input_text, voice_id, eleven_labs_api_key, stability, similarity):
     try:
         CHUNK_SIZE = 1024
         url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
@@ -16,8 +16,9 @@ def text_to_speech(input_text, voice_id, eleven_labs_api_key):
             "text": input_text,
             "model_id": "eleven_monolingual_v1",
             "voice_settings": {
-                "stability": 0.5,
-                "similarity_boost": 0.5
+                "stability": stability,
+                "similarity_boost": similarity
+                # "style": 0.02
             }
         }
 

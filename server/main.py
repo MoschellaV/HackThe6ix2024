@@ -52,6 +52,8 @@ class RequestModel(BaseModel):
     purpose: str
     voice: str
     lengthOfCall: str
+    stability: float
+    similarity: float
 
 app = FastAPI()
 
@@ -78,11 +80,12 @@ async def start_call(req: RequestModel, background_tasks: BackgroundTasks):
     print(initial_response.content)
     
     update_completion_status(data["id"], "Creating speech")
-    audio_file = text_to_speech(initial_response.content, data["voice"], eleven_labs_api_key)
+    audio_file = text_to_speech(initial_response.content, data["voice"], eleven_labs_api_key, data["stability"], data["similarity"])
 
     file_path = upload_audio(audio_file, bucket)
     print(file_path)
     twiml = VoiceResponse()
+    twiml.pause(length=1) # 2 sec delay
     twiml.play(file_path)
     # twiml.record(play_beep=False)
 
