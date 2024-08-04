@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -20,11 +20,50 @@ import { Box, CircularProgress, Slider, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+
+import Image from "next/image";
+
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+
+import { voices } from "@/lib/voices";
+
+function useFloatingEffect() {
+  const [style, setStyle] = useState({});
+  useEffect(() => {
+    let mounted = true;
+    const amplitude = Math.random() * 10 + 5;
+    const speed = Math.random() * 2000 + 1000;
+    const angle = Math.random() * 2 * Math.PI;
+
+    const updatePosition = () => {
+      if (!mounted) return;
+      const y = Math.sin(Date.now() / speed + angle) * amplitude;
+      setStyle({
+        transform: `translateY(${y}px)`
+      });
+    };
+
+    const intervalId = setInterval(updatePosition, 40);
+    return () => {
+      mounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  return style;
+}
+
 export default function Dashboard() {
   const [submissionId, setSubmissionId] = useState();
   const [activeDoc, setActiveDoc] = useState(null);
   const [loading, setLoading] = useState(false);
   const [openAdvanced, setOpenAdvanced] = useState(false);
+
+  const actors = [{ name: "Billy" }, { name: "Mike" }, { name: "Freya" }, { name: "Dorthy" }];
+  const formRef = useRef(null);
 
   useEffect(() => {
     if (submissionId) {
@@ -43,7 +82,6 @@ export default function Dashboard() {
         }
       );
 
-      // Cleanup function to unsubscribe from the listener when the component unmounts
       return () => unsub();
     }
   }, [submissionId]);
@@ -53,7 +91,6 @@ export default function Dashboard() {
     purpose: z.string().min(1, { message: "Required" }),
     phoneNumber: z.string().min(10, { message: "Phone number must be at least 10 digits" }),
     lengthOfCall: z.enum(["small", "medium", "large"], { errorMap: () => ({ message: "Required" }) }),
-
     tone: z.enum(["Flirty", "Funny", "Mean", "Normal"], { errorMap: () => ({ message: "Required" }) }),
     voice: z.enum(["pqHfZKP75CvOlQylNhV4", "jsCqWAovK2LkecY7zXl4", "bIHbv24MWmeRgasZH58o", "ThT5KcBeYPX3keUQqHPh"], {
       errorMap: () => ({ message: "Required" })
@@ -102,8 +139,6 @@ export default function Dashboard() {
       postData(id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall, stability, similarity);
       setLoading(false);
       document.getElementById("call-progress").scrollIntoView({ behavior: "smooth" });
-
-      // reset(); // comment out for now
     } else {
       setLoading(false);
       console.log("Error saving data");
@@ -114,12 +149,82 @@ export default function Dashboard() {
     <>
       <AuroraBackground className={"h-fit"}>
         <div className="flex flex-col w-full items-center justify-center w-full overflow-hidden">
-          <div className="overflow-hidden p-5 rounded-md w-full h-screen flex items-center justify-center flex flex-col gap-4">
-            <label className="text-8xl font-sans font-semibold">Call Me Maybe</label>
-            <label className="text-2xl font-san font-medium "> Speak Less, Achieve More</label>
+          <div
+            id="Header"
+            className="overflow-hidden p-5 rounded-md w-full h-screen flex items-center justify-center flex-col gap-20">
+            <div className="w-full flex flex-col items-center justify-center gap-2">
+              <label className="text-8xl font-sans font-semibold mt-10">Call Me Maybe</label>{" "}
+              <label className="text-2xl font-san font-medium">Speak Less, Achieve More</label>
+              <Button
+                variant="contained"
+                sx={{
+                  width: 1 / 3,
+                  borderRadius: "8px"
+                }}
+                onClick={() => formRef.current.scrollIntoView({ behavior: "smooth" })}>
+                Go To Form
+              </Button>
+            </div>
+            <div className="flex flex-row w-full justify-between">
+              {Object.keys(voices).map((key, index) => {
+                const item = voices[key];
+                const floatingStyle = useFloatingEffect();
+
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      marginTop: index === 0 || index === actors.length - 1 ? "-100px" : "0px",
+                      ...floatingStyle,
+                    }}
+                  >
+                    <Card sx={{ width: "300px", height: "230px" }} variant="outlined">
+                      <CardContent>
+                        <div className="flex flex-row gap-4">
+                          <div className="flex-shrink-0">
+                            <Image
+                              src={item.img}
+                              width={140}
+                              height={140}
+                              alt="Picture of the author"
+                              style={{ objectFit: "contain" }}
+                            />
+                          </div>
+                          <div className="flex flex-col justify-between flex-grow">
+                            <div className="flex flex-col">
+                              <label className="text-sm text-gray-800 font-semibold">{item.name}</label>
+                              <label className="text-xs text-gray-500 text-medium">{item.description}</label>
+                            </div>
+                            <CardActions className="w-full text-right">
+                              <div className="w-full text-left">
+                                <Button
+                                  key={key}
+                                  onClick={() => {
+                                    const audio = new Audio(voices[key].voice);
+                                    audio.play();
+                                  }}
+                                >
+                                  <div className="flex flex-row items-center">
+                                    <PlayCircleOutlineIcon />
+                                    Play {voices[key].name}
+                                  </div>
+                                </Button>
+                              </div>
+                            </CardActions>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                );
+                
+              })}
+            </div>
           </div>
 
           <form
+            ref={formRef}
+            id="Form"
             onSubmit={handleSubmit(onSubmit)}
             className="p-5 rounded-md w-full h-screen flex items-center justify-center w-full">
             <div className="w-1/2 h-screen flex items-center justify-center">
