@@ -167,7 +167,7 @@ export default function Dashboard() {
                 Go To Form
               </Button>
             </div>
-            <div className="flex flex-row w-full justify-between">
+            <div className="flex flex-row w-full justify-between p-4">
               {Object.keys(voices).map((key, index) => {
                 const item = voices[key];
                 const floatingStyle = useFloatingEffect();
@@ -219,18 +219,16 @@ export default function Dashboard() {
                     </Card>
                   </div>
                 );
-                
               })}
             </div>
           </div>
-
           <form
             ref={formRef}
             id="Form"
             onSubmit={handleSubmit(onSubmit)}
             className="p-5 rounded-md w-full h-screen flex items-center justify-center align-center h-full w-full">
-            <div className="w-1/2 h-screen flex items-center justify-center">
-              <div className="bg-transparent p-8 rounded-lg flex flex-col items-center gap-4 shadow-lg w-full ">
+            <div className="flex flex-col w-1/2 h-screen flex items-center justify-center">
+              <div className="flex flex-col bg-transparent p-8 rounded-lg flex flex-col items-center gap-4 shadow-lg w-full ">
                 <label className="text-2xl font-semibold">Make your first call 🚀</label>
 
                 <Controller
@@ -409,6 +407,7 @@ export default function Dashboard() {
                   Submit
                 </Button>
               </div>
+              <div className="mt-32"></div>
             </div>
           </form>
         </div>
