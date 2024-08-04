@@ -16,10 +16,10 @@ import { postData, saveCallData } from "@/services/api";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import ShowCompletionProgress from "@/components/ShowCompletionProgress";
-import { Box, CircularProgress, Grid, Slider, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, Slider, Tooltip, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { voices } from "@/lib/voices";
 import HeroCard from "@/components/HeroCards";
 
@@ -301,9 +301,19 @@ export default function Home() {
                       defaultValue={0.5}
                       render={({ field, fieldState }) => (
                         <div className="flex flex-col w-full">
-                          <Typography sx={{ fontSize: 14, opacity: 0.6 }} id="stability-slider" gutterBottom>
-                            Stability
-                          </Typography>
+                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <Typography sx={{ fontSize: 14, opacity: 0.6, mb: 0 }} id="stability-slider" gutterBottom>
+                              Stability
+                            </Typography>
+                            <Tooltip
+                              title="Adjusts the voice consistency. Lower values produce a more emotive and varied performance while higher values lead to a more stable and consistent voice."
+                              placement="top"
+                              arrow>
+                              <IconButton size="small">
+                                <HelpOutlineOutlinedIcon sx={{ fontSize: 18, opacity: 0.7 }} />
+                              </IconButton>
+                            </Tooltip>
+                          </Box>
                           <Slider
                             {...field}
                             aria-labelledby="stability-slider"
@@ -323,9 +333,19 @@ export default function Home() {
                       defaultValue={0.75}
                       render={({ field, fieldState }) => (
                         <div className="flex flex-col w-full">
-                          <Typography sx={{ fontSize: 14, opacity: 0.6 }} id="similarity-slider" gutterBottom>
-                            Similarity
-                          </Typography>
+                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <Typography sx={{ fontSize: 14, opacity: 0.6, mb: 0 }} id="similarity-slider" gutterBottom>
+                              Similarity
+                            </Typography>
+                            <Tooltip
+                              title="Controls how closely the AI replicates the original voice. Higher values ensure the generated voice closely matches the original, which might include artifacts or background noise if present in the source. Lower values allow for more flexibility and creativity in the voice generation."
+                              placement="top"
+                              arrow>
+                              <IconButton size="small">
+                                <HelpOutlineOutlinedIcon sx={{ fontSize: 18, opacity: 0.7 }} />
+                              </IconButton>
+                            </Tooltip>
+                          </Box>
                           <Slider
                             {...field}
                             aria-labelledby="similarity-slider"
