@@ -67,7 +67,7 @@ export default function Home() {
     similarity: z.number().min(0).max(1).default(0.75)
   });
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, reset } = useForm({
     resolver: zodResolver(schema)
   });
 
@@ -114,6 +114,8 @@ export default function Home() {
           element.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
         }
       }, 100);
+
+      reset();
     } else {
       setLoading(false);
       console.log("Error saving data");
