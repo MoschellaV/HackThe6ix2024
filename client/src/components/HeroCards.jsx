@@ -25,7 +25,7 @@ export default function HeroCard({ index, item }) {
           p: 2
         }}>
         <Grid item xs={6} md={6} sx={{ position: "relative", height: "70%" }}>
-          <Image src={item.img} fill alt="Picture of the author" style={{ objectFit: "contain" }} />
+          <Image src={item.img} fill alt="Picture of the author" style={{ objectFit: "contain" }} draggable={false} />
         </Grid>
 
         <Grid
