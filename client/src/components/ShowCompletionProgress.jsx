@@ -33,6 +33,15 @@ export default function ShowCompletionProgress({ docData }) {
         setStatusList(prevList => [...prevList, { text: docData.completionStatus, type: "title" }]);
         setLastCompletionStatus(docData.completionStatus);
       }
+
+      if (docData.completionStatus === "pending") {
+        setStatusList(prevList => [
+          ...prevList,
+          { text: "Processing", type: "title" },
+          { text: "1 second while we handle all the heavy lifting 💪", type: "change" }
+        ]);
+        setLastCompletionStatus("pending");
+      }
     }
 
     if (docData.textContent !== null && docData.textContent !== lastStatus) {
