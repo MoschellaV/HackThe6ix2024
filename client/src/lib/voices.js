@@ -22,13 +22,13 @@ export const voices = {
   },
   bIHbv24MWmeRgasZH58o: {
     name: "Will",
-    description: "I’m ready to have some fun and write my destiny.",
+    description: "I'm ready to have some fun and write my destiny.",
     img: willImg,
     voice: willMP3
   },
   ThT5KcBeYPX3keUQqHPh: {
     name: "Dorothy",
-    description: "Come to me, my children. Spread your inner butterfly’s love.",
+    description: "Come to me, my children. Spread your inner butterfly's love.",
     img: dorothyImg,
     voice: dorothyMP3
   }

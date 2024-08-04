@@ -19,37 +19,9 @@ import ShowCompletionProgress from "@/components/ShowCompletionProgress";
 import { Box, CircularProgress, Grid, Slider, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import Image from "next/image";
-
-import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 
 import { voices } from "@/lib/voices";
-
-function useFloatingEffect() {
-  const [style, setStyle] = useState({});
-  useEffect(() => {
-    let mounted = true;
-    const amplitude = Math.random() * 10 + 5;
-    const speed = Math.random() * 2000 + 1000;
-    const angle = Math.random() * 2 * Math.PI;
-
-    const updatePosition = () => {
-      if (!mounted) return;
-      const y = Math.sin(Date.now() / speed + angle) * amplitude;
-      setStyle({
-        transform: `translateY(${y}px)`
-      });
-    };
-
-    const intervalId = setInterval(updatePosition, 40);
-    return () => {
-      mounted = false;
-      clearInterval(intervalId);
-    };
-  }, []);
-
-  return style;
-}
+import HeroCard from "@/components/HeroCards";
 
 export default function Home() {
   const [submissionId, setSubmissionId] = useState();
@@ -58,7 +30,6 @@ export default function Home() {
   const [openAdvanced, setOpenAdvanced] = useState(false);
   const [isProgressActive, setIsProgressActive] = useState(false);
 
-  const actors = [{ name: "Billy" }, { name: "Mike" }, { name: "Freya" }, { name: "Dorthy" }];
   const formRef = useRef(null);
   const progressRef = useRef(null);
   
@@ -164,7 +135,7 @@ export default function Home() {
                 Call Me Maybe
               </label>{" "}
               <label className="text-lg font-san font-medium my-3 text-center">
-                Hey I just met you, and this is crazy, but here's my number, so call me maybe!
+                {"Hey I just met you, and this is crazy, but here's my number, so call me maybe!"}
               </label>
               <Button
                 variant="contained"
@@ -180,65 +151,10 @@ export default function Home() {
             </div>
             <div className="flex flex-row w-full justify-between p-4">
               {Object.keys(voices).map((key, index) => {
-                const item = voices[key];
-                const floatingStyle = useFloatingEffect();
-
                 return (
-                  <div
-                    key={index}
-                    style={{
-                      marginTop: index === 0 || index === actors.length - 1 ? "-100px" : "0px",
-                      ...floatingStyle
-                    }}>
-                    <Grid
-                      container
-                      rowSpacing={1}
-                      sx={{
-                        width: "300px",
-                        height: "250px",
-                        backgroundColor: "rgba(246, 246, 246, 0.4)",
-                        borderRadius: "8px",
-                        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.10)",
-                        p: 2
-                      }}>
-                      <Grid item xs={6} md={6} sx={{ position: "relative", height: "70%" }}>
-                        <Image src={item.img} fill alt="Picture of the author" style={{ objectFit: "contain" }} />
-                      </Grid>
-
-                      <Grid
-                        item
-                        xs={6}
-                        md={6}
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          justifyContent: "center"
-                        }}>
-                        <Typography variant="body1" sx={{ textAlign: "center", mb: 1, fontWeight: 600 }}>
-                          {item.name}
-                        </Typography>
-                        <Typography variant="body1" sx={{ textAlign: "center", fontSize: 14 }}>
-                          {item.description}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Button
-                          fullWidth
-                          sx={{ border: "1px solid rgb(57, 100, 239)" }}
-                          key={key}
-                          onClick={() => {
-                            const audio = new Audio(voices[key].voice);
-                            audio.play();
-                          }}>
-                          <div className="flex flex-row items-center">
-                            <PlayCircleOutlineIcon sx={{ mr: 1 }} />
-                            Play {voices[key].name}'s voice
-                          </div>
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </div>
+                  <Box key={index}>
+                    <HeroCard index={index} item={voices[key]} />
+                  </Box>
                 );
               })}
             </div>
