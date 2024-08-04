@@ -50,12 +50,12 @@ export default function HeroCard({ index, item }) {
             fullWidth
             sx={{ border: "1px solid rgb(57, 100, 239)" }}
             onClick={() => {
-              const audio = new Audio(voices[key].voice);
+              const audio = new Audio(item.voice);
               audio.play();
             }}>
             <div className="flex flex-row items-center">
               <PlayCircleOutlineIcon sx={{ mr: 1 }} />
-              {"Play {voices[key].name}'s voice"}
+              {`Play ${item.name}'s voice`}
             </div>
           </Button>
         </Grid>
