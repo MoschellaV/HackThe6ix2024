@@ -67,9 +67,21 @@ export default function Home() {
     similarity: z.number().min(0).max(1).default(0.75)
   });
 
-  const { handleSubmit, control, reset } = useForm({
-    resolver: zodResolver(schema)
+  const form = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      prompt: "",
+      purpose: "",
+      phoneNumber: "",
+      lengthOfCall: "", 
+      tone: "", 
+      voice: "", 
+      stability: 0.5,
+      similarity: 0.75
+    }
   });
+
+  const { handleSubmit, control, reset } = form
 
   const onSubmit = async data => {
     setLoading(true);
@@ -115,7 +127,7 @@ export default function Home() {
         }
       }, 100);
 
-      reset();
+      reset(form);
     } else {
       setLoading(false);
       console.log("Error saving data");
