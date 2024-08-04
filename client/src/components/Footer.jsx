@@ -12,7 +12,7 @@ export default function Footer() {
         <a href="https://www.linkedin.com/in/aditosto/" target="_blank" rel="noopener noreferrer" className="underline">
           Adrian Di Tosto,
         </a>
-        and{" "}
+         and{" "}
         <a href="https://danieldombrovsky.com/" target="_blank" rel="noopener noreferrer" className="underline">
           Daniel Dombrovsky
         </a>{" "}
