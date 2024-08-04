@@ -64,6 +64,8 @@ export default function Dashboard() {
 
   const actors = [{ name: "Billy" }, { name: "Mike" }, { name: "Freya" }, { name: "Dorthy" }];
   const formRef = useRef(null);
+  const progressRef = useRef(null);
+
 
   useEffect(() => {
     if (submissionId) {
@@ -138,7 +140,7 @@ export default function Dashboard() {
 
       postData(id, prompt, tone, phoneNumber, purpose, voice, lengthOfCall, stability, similarity);
       setLoading(false);
-      document.getElementById("call-progress").scrollIntoView({ behavior: "smooth" });
+      progressRef.current.scrollIntoView({ behavior: "smooth" })
     } else {
       setLoading(false);
       console.log("Error saving data");
@@ -226,9 +228,9 @@ export default function Dashboard() {
             ref={formRef}
             id="Form"
             onSubmit={handleSubmit(onSubmit)}
-            className="p-5 rounded-md w-full h-screen flex items-center justify-center w-full">
+            className="p-5 rounded-md w-full h-screen flex items-center justify-center align-center h-full w-full">
             <div className="w-1/2 h-screen flex items-center justify-center">
-              <div className="bg-transparent p-8 rounded-lg flex flex-col items-center gap-10 shadow-lg w-full ">
+              <div className="bg-transparent p-8 rounded-lg flex flex-col items-center gap-4 shadow-lg w-full ">
                 <label className="text-2xl font-semibold">Make your first call 🚀</label>
 
                 <Controller
@@ -411,7 +413,7 @@ export default function Dashboard() {
           </form>
         </div>
       </AuroraBackground>
-      <div id="call-progress">
+      <div ref={progressRef} id="call-progress">
         {submissionId && (activeDoc ? <ShowCompletionProgress docData={activeDoc} /> : <CircularProgress />)}
       </div>
     </>
