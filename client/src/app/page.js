@@ -192,7 +192,7 @@ export default function Home() {
                   name="prompt"
                   render={({ field, fieldState }) => (
                     <TextField
-                      label="Call message (ex. Don't forget to pick up the milk)"
+                      label="Call details (ex. Tell dad to pick up the milk)"
                       variant="outlined"
                       fullWidth
                       size="small"
