@@ -26,7 +26,7 @@ export default function Home() {
     if (isProgressActive && progressRef.current && !showError) {
       setTimeout(() => {
         progressRef.current.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
-      }, 500);
+      }, 1000);
     }
   }, [isProgressActive]);
 
