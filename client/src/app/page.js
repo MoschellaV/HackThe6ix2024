@@ -24,7 +24,9 @@ export default function Home() {
 
   useEffect(() => {
     if (isProgressActive && progressRef.current && !showError) {
-      progressRef.current.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+      setTimeout(() => {
+        progressRef.current.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+      }, 500);
     }
   }, [isProgressActive]);
 

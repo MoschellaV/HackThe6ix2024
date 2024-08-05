@@ -99,12 +99,12 @@ export default function SubmissionForm({
       } catch (error) {
         setShowError(true);
         setLoading(false);
-        // track("call-creation-failed", { id: id, createdAt: createdAt, purpose: purpose });
+        track("call-creation-failed", { id: id, createdAt: createdAt, purpose: purpose });
         return;
       }
       setLoading(false);
 
-      // track("call-creation-success", { id: id, createdAt: createdAt, purpose: purpose });
+      track("call-creation-success", { id: id, createdAt: createdAt, purpose: purpose });
       reset(form);
     } else {
       setLoading(false);
