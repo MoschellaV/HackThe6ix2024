@@ -19,7 +19,7 @@ def generate_text(prompt, tone, purpose, lengthOfCall):
         gpt_response = completion.choices[0].message
 
         if gpt_response:
-            return gpt_response
+            return gpt_response.content
 
     except Exception as e:
         print("Error generating start:", e)

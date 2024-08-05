@@ -30,6 +30,8 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 
 eleven_labs_api_key = os.getenv('ELEVEN_LABS_API_KEY')
 
+special_secret = os.getenv('SPECIAL_SECRET')
+
 client = Client(account_sid, auth_token)
 
 @https_fn.on_request()
@@ -49,21 +51,23 @@ def start_call(req: https_fn.Request) -> https_fn.Response:
 
     try:
         data = req.get_json(silent=True)
-        if data is None:
-            return {"message": "No data provided"}
         phoneNumber = data.get('phoneNumber')
-        if phoneNumber is None:
-            return {"message": "No phoneNumber provided"}
     
         update_completion_status(data["id"], "Generating custom message")
-        initial_response = generate_text(data["prompt"], data["tone"], data["purpose"], data["lengthOfCall"])
-        check_string_length(initial_response.content, 10000)
-        update_field(data["id"], "textContent", initial_response.content)
 
-        print(initial_response.content)
+        # check if the special secret is provided shhhhh :)
+        if special_secret and data["purpose"].lower() == special_secret:
+            call_text = data["prompt"]
+        else:
+            call_text = generate_text(data["prompt"], data["tone"], data["purpose"], data["lengthOfCall"])
+
+        check_string_length(call_text, 10000)
+        update_field(data["id"], "textContent", call_text)
+
+        print(call_text)
         
         update_completion_status(data["id"], "Creating speech")
-        audio_file = text_to_speech(initial_response.content, data["voice"], eleven_labs_api_key, data["stability"], data["similarity"])
+        audio_file = text_to_speech(call_text, data["voice"], eleven_labs_api_key, data["stability"], data["similarity"])
 
         file_path = upload_audio(audio_file, bucket)
         print(file_path)
