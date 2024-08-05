@@ -4,7 +4,6 @@ import React from "react";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 
 export default function HeroCardsSmall({ voices }) {
-  console.log(voices);
   return (
     <Grid container spacing={5}>
       {Object.keys(voices).map((key, index) => {

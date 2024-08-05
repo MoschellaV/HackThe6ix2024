@@ -17,9 +17,16 @@ export default function Home() {
   const [activeDoc, setActiveDoc] = useState(null);
   const [isProgressActive, setIsProgressActive] = useState(false);
   const lgBreakpoint = useMediaQuery("(min-width:1260px)");
+  const [showError, setShowError] = useState(false);
 
   const formRef = useRef(null);
   const progressRef = useRef(null);
+
+  useEffect(() => {
+    if (isProgressActive && progressRef.current && !showError) {
+      progressRef.current.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+    }
+  }, [isProgressActive]);
 
   useEffect(() => {
     if (submissionId) {
@@ -27,7 +34,6 @@ export default function Home() {
         doc(db, "calls", submissionId),
         doc => {
           if (doc.exists()) {
-            console.log("Document data:", doc.data());
             setActiveDoc(doc.data());
           } else {
             console.log("No such document!");
@@ -90,12 +96,17 @@ export default function Home() {
             setIsProgressActive={setIsProgressActive}
             setSubmissionId={setSubmissionId}
             setActiveDoc={setActiveDoc}
+            showError={showError}
+            setShowError={setShowError}
           />
         </div>
       </AuroraBackground>
 
-      <div ref={progressRef} id="call-progress" className={`${isProgressActive ? "w-full h-screen" : ""}`}>
-        {submissionId && (activeDoc ? <ShowCompletionProgress docData={activeDoc} /> : <CircularProgress />)}
+      <div
+        ref={progressRef}
+        id="call-progress"
+        className={`${isProgressActive && !showError ? "w-full h-screen" : ""}`}>
+        {submissionId && activeDoc && !showError && <ShowCompletionProgress docData={activeDoc} />}
       </div>
     </>
   );
