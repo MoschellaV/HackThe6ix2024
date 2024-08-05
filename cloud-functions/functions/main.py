@@ -78,7 +78,12 @@ def start_call(req: https_fn.Request) -> https_fn.Response:
                 twiml=twiml,
         )
 
-        return {"message": "Call initiated", "call_sid": call.sid}
+        return https_fn.Response(
+                json.dumps({"message": "Call initiated", "call_sid": str(call.sid)}),
+                status=200,
+                mimetype="application/json",
+                headers=headers
+            )
     except Exception as e:
         print("Error analyzing syllabus:", e)
         return https_fn.Response(
