@@ -105,9 +105,9 @@ export default function SubmissionForm({ formRef, setIsProgressActive, setSubmis
       ref={formRef}
       id="Form"
       onSubmit={handleSubmit(onSubmit)}
-      className="p-5 rounded-md w-full h-screen flex items-center justify-center align-center h-full w-full">
-      <div className="flex flex-col w-1/2 h-screen flex items-center justify-center">
-        <div className="flex flex-col bg-transparent p-8 rounded-lg flex flex-col items-center gap-6 shadow-lg w-full ">
+      className="rounded-md w-full h-screen flex items-center justify-center align-center h-full sm:w-full">
+      <div className="flex flex-col sm:w-full md:w-1/2 h-screen items-center justify-center">
+        <div className="flex flex-col bg-transparent p-8 rounded-lg items-center gap-6 shadow-lg w-full ">
           <label className="text-2xl font-semibold">Try it out and make a call 🚀</label>
 
           <Controller
