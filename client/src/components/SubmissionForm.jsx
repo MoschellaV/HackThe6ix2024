@@ -15,6 +15,7 @@ import { Alert, Box, IconButton, Slider, Snackbar, Tooltip, Typography, useMedia
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import { track } from "@vercel/analytics";
 
 export default function SubmissionForm({
   formRef,
@@ -98,10 +99,12 @@ export default function SubmissionForm({
       } catch (error) {
         setShowError(true);
         setLoading(false);
+        track("call-creation-failed", { id: id, createdAt: createdAt, purpose: purpose });
         return;
       }
       setLoading(false);
 
+      track("call-creation-success", { id: id, createdAt: createdAt, purpose: purpose });
       reset(form);
     } else {
       setLoading(false);

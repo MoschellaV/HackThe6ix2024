@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import "./globals.css";
 import ThemeRegistry from "./ThemeRegistry";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata = {
   title: "Call Me Maybe",
@@ -10,6 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ThemeRegistry options={{ key: "mui" }}>
+      <Analytics />
       <html lang="en">
         <body style={{ backgroundColor: "#FAFAFA" }}>
           {children}
