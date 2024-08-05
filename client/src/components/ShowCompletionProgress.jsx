@@ -51,7 +51,7 @@ export default function ShowCompletionProgress({ docData }) {
   }, [docData.completionStatus, docData.textContent]);
 
   return (
-    <Box sx={{ height: "100vh", width: "100vw", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <Box sx={{ minHeight: "100vh", width: "100vw", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div className="w-3/4 h-3/4">
         <Grid container spacing={2} sx={{ height: "100%" }}>
           <Grid
@@ -64,16 +64,21 @@ export default function ShowCompletionProgress({ docData }) {
               <Typography variant="h3" sx={{ textAlign: "center", my: 2 }}>
                 {currentVoice.name}
               </Typography>
-              <Typography variant="body1" sx={{ textAlign: "center", fontSize: 16 }}>
+              <Typography variant="body1" sx={{ textAlign: "center", fontSize: 16, mb: { xs: 3, md: 0 } }}>
                 {currentVoice.description}
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} sx={{ mb: { xs: 10, md: 0 } }}>
             <div
-              className="h-full bg-transparent p-8 rounded-lg flex flex-col shadow-lg"
-              style={{ overflow: "auto", maxHeight: "70vh" }}>
-              <Box sx={{ p: 3 }}>
+              className="bg-transparent p-8 rounded-lg flex flex-col shadow-lg"
+              style={{
+                maxHeight: "70vh",
+                overflowY: "scroll",
+                scrollbarColor: "rgb(57, 100, 239, 0.7) #fff",
+                scrollbarWidth: "thin"
+              }}>
+              <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
                 <Stack spacing={1}>
                   {statusList.map((status, index) => (
                     <div key={index}>

@@ -140,7 +140,7 @@ export default function SubmissionForm({
         id="Form"
         onSubmit={handleSubmit(onSubmit)}
         className="rounded-md w-full h-screen flex items-center justify-center align-center h-full sm:w-full">
-        <div className="flex flex-col sm:w-full md:w-1/2 h-screen items-center justify-center">
+        <div className="flex flex-col sm:w-full md:w-1/2 items-center justify-center">
           <div className="flex flex-col bg-transparent p-8 rounded-lg items-center gap-6 shadow-lg w-full ">
             <label className="text-2xl font-semibold">Try it out and make a call 🚀</label>
 
@@ -340,7 +340,6 @@ export default function SubmissionForm({
               Make call
             </Button>
           </div>
-          <div className="mt-32"></div>
         </div>
       </form>
     </>

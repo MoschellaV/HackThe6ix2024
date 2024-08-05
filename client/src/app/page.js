@@ -59,7 +59,7 @@ export default function Home() {
             className="overflow-hidden p-5 rounded-md w-full  flex items-center justify-center flex-col gap-20">
             <div className="w-full flex flex-col items-center justify-center gap-2">
               <label
-                className="text-8xl font-sans font-semibold mt-10 text-center"
+                className="text-8xl font-sans font-semibold mt-20 text-center"
                 style={{ color: "rgb(43, 77, 189, 1)" }}>
                 Call Me Maybe
               </label>
@@ -104,10 +104,7 @@ export default function Home() {
         </div>
       </AuroraBackground>
 
-      <div
-        ref={progressRef}
-        id="call-progress"
-        className={`${isProgressActive && !showError ? "w-full h-screen" : ""}`}>
+      <div ref={progressRef} id="call-progress">
         {submissionId && activeDoc && !showError && <ShowCompletionProgress docData={activeDoc} />}
       </div>
     </>
