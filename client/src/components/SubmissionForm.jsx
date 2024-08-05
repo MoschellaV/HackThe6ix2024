@@ -142,7 +142,7 @@ export default function SubmissionForm({
         className="rounded-md w-full h-screen flex items-center justify-center align-center h-full sm:w-full">
         <div className="flex flex-col sm:w-full md:w-1/2 items-center justify-center">
           <div className="flex flex-col bg-transparent p-8 rounded-lg items-center gap-6 shadow-lg w-full ">
-            <label className="text-2xl font-semibold">Try it out and make a call 🚀</label>
+            <label className="text-2xl font-semibold text-center">Try it out and make a call 🚀</label>
 
             <Controller
               control={control}
