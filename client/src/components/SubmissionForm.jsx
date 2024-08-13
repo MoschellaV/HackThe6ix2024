@@ -122,11 +122,7 @@ export default function SubmissionForm({
 
   return (
     <>
-      <Snackbar
-        open={showError}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}>
+      <Snackbar open={showError} onClose={handleSnackbarClose} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
         <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: "100%" }}>
           {"Uh oh an error occurred while placing your call! "}
           <br />
